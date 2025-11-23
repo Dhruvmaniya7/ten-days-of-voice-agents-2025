@@ -1,7 +1,7 @@
 import logging
 import json
 from datetime import datetime
-import os # NEW: Added for file management
+import os 
 
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -15,8 +15,8 @@ from livekit.agents import (
     cli,
     metrics,
     tokenize,
-    function_tool, # UNCOMMENTED
-    RunContext     # UNCOMMENTED
+    function_tool, 
+    RunContext    
 )
 from livekit.plugins import murf, silero, google, deepgram, noise_cancellation
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
@@ -31,7 +31,6 @@ WELLNESS_LOG_FILE = "wellness_log.json"
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        # NEW: Updated instructions for the Health & Wellness Companion
         super().__init__(
             instructions="""You are Luna, a supportive, realistic, and grounded Health & Wellness Voice Companion.
             Your role is to conduct a short daily check-in with the user about their mood, energy, and daily objectives.
@@ -54,7 +53,6 @@ class Assistant(Agent):
             logger.warning(f"Could not read or parse {WELLNESS_LOG_FILE}. Starting fresh.")
             return []
 
-    # NEW TOOL 1: Save data to JSON
     @function_tool
     async def save_checkin_data(self, context: RunContext, mood_summary: str, objectives: list[str]):
         """Use this tool to persist the key data from the current check-in session. 
@@ -79,10 +77,10 @@ class Assistant(Agent):
 
         logger.info(f"Saved wellness check-in: {new_entry}")
         
-        # This message is what the LLM will see, informing it the save was successful.
+       
         return "Check-in data has been successfully saved to the wellness log."
 
-    # NEW TOOL 2: Get a summary of the most recent check-in for context
+    
     @function_tool
     async def get_past_checkin_summary(self, context: RunContext):
         """Use this tool to retrieve a summary of the most recent check-in to provide historical context to the user.
@@ -187,4 +185,5 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
+
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, prewarm_fnc=prewarm))
