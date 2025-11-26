@@ -1,28 +1,46 @@
-###Day 6: Fraud Detection Agent is LIVE! 🚨
-##This agent is designed to handle a critical, high-stakes conversation while maintaining a calm, professional persona.
+# Day 6 – Fraud Alert Voice Agent
 
-##What I accomplished in this challenge:
+## 🌐 Overview
 
-#Database Integration: Implemented an agent capable of loading a specific fraud case (simulating a database lookup) based on the user's name. I scaled the mock database to 20 unique cases with specific security questions for robust testing.
+This project implements a **Fraud Alert Voice Agent** for a fictional bank, designed to contact customers about suspicious transactions, verify their identity, and determine if the transaction is legitimate or fraudulent. The agent is built to handle a single fraud case pulled from a database and update the case status based on the customer's response.
 
-#Secure Verification Flow: Designed a strict, two-step call flow that introduces the bank, performs identity verification using non-sensitive data, and then presents the suspicious transaction details.
+*This agent was built as part of the Murf AI Voice Agent Challenge.*
 
-Decision Logic: The agent correctly branches the conversation to either confirm the transaction as safe or deny it as fraudulent, ensuring the user knows the outcome (e.g., "card blocked and dispute raised").
+## ✨ Implementation Details
 
-#Structured Logging: Ensured the agent logs the final decision (confirmed_safe or confirmed_fraud) and a summary note to a local logger.json file, mimicking a CRM update required for back-office processing.
+### Database Setup
 
-#Huge shoutout to the power and speed of Murf Falcon TTS for providing the fast, natural voice needed for this high-stakes, real-time application.
+To simulate real-world data, a database was created to store customer and transaction details.
 
-#MurfAIVoiceAgentsChallenge #10DaysofAIVoiceAgents
+* **Data Source:** An external **JSON file** was created to act as the sample database source.
+* **Entries:** **20 distinct fraud case entries** have been added to the database for testing various scenarios (`confirmed_safe`, `confirmed_fraud`, and `verification_failed`).
+* **Key Fields in Database Entries:**
+    * `userName`
+    * `securityIdentifier`
+    * `cardEnding` (Masked card number, e.g., `**** 1234`)
+    * `transactionAmount`
+    * `merchantName`
+    * `location`
+    * `timestamp`
+    * `securityQuestion` (for basic verification)
+    * `currentStatus` (e.g., `pending_review`)
 
-Each day, you'll receive a new task that builds upon your voice agent. The tasks will help you:
+### Agent Persona
 
-Implement different personas and conversation styles
+The voice agent is configured to act as a **Fraud Detection Representative** for a fictional bank.
 
-Add custom tools and capabilities
+* **Tone:** Calm, professional, and reassuring.
+* **Safety:** The agent is explicitly instructed **not** to ask for sensitive information like full card numbers, PINs, or passwords. Verification relies only on non-sensitive, pre-stored data (like a security question).
 
-Integrate with external APIs
+## 🎯 Primary Goal (MVP) – Call Flow
 
-Build domain-specific agents (customer service, tutoring, etc.)
+The primary goal was to build a voice agent that executes a clear, minimal fraud verification sequence for a single suspicious transaction loaded from the database.
 
-Optimize performance and user experience
+### Call Flow Sequence
+
+1.  **Start & Introduction:** Greet the user and introduce itself as the bank's fraud department, explaining the purpose of the call.
+2.  **Load Case:** Prompt the user for a username to load the corresponding fraud case from the database.
+3.  **Basic Verification:** Ask a non-sensitive verification question (e.g., security question from the database).
+    * *If verification fails, the agent politely ends the call.*
+4.  **Transaction Details:** Read out the suspicious transaction details (merchant, amount, masked card, time, and location) from the loaded case.
+5.  **Confirmation:** Ask the user if they made the transaction (Yes/No). [cite: uploaded:murf-ai/ten-days-of-voice
