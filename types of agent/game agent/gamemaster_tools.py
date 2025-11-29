@@ -9,7 +9,7 @@ class WorldState:
     def __init__(self):
         self.state = {
             "character": {
-                "name": "mikasa",
+                "name": "traveler",
                 "class": "Adventurer",
                 "hp": 20,
                 "max_hp": 20,
@@ -110,4 +110,5 @@ class WorldState:
             return "Game loaded successfully. Welcome back, traveler."
         except Exception as e:
             logger.error(f"Error loading game: {e}")
+
             return "Failed to load game."
